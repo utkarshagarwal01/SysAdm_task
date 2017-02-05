@@ -9,6 +9,8 @@ $em=$_POST['email'];
 $gn=$_POST['gender'];
 $ct=$_POST['cont'];
 
+
+
 $connection=mysqli_connect("localhost","root","","sports_portal");
 $nm=mysqli_real_escape_string($connection,$nm);
 $rg=mysqli_real_escape_string($connection,$rg);
