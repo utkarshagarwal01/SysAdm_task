@@ -11,7 +11,7 @@ $ct=$_POST['cont'];
 
 
 
-$connection=mysqli_connect("localhost","root","","sports_portal");
+$connection=mysqli_connect("localhost","phpmyadmin","utkarsh_123","sports_portal");
 $nm=mysqli_real_escape_string($connection,$nm);
 $rg=mysqli_real_escape_string($connection,$rg);
 $coll=mysqli_real_escape_string($connection,$coll);
