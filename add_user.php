@@ -1,8 +1,4 @@
 <?php  
-//session_start();
-//if(isset($_SESSION["user"]) && !empty($_SESSION["user"]))
-//{
-
 require_once("check_functions.php");
 
 if ($_SERVER['REQUEST_METHOD'] != 'POST' || !isset($_POST['secret']))
@@ -10,9 +6,6 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST' || !isset($_POST['secret']))
 	echo "Some error occured"; 
 	die();
 }
-
-
-
 
 $nm=$_POST['name'];
 $rg=$_POST['reg'];
@@ -30,6 +23,7 @@ $flags[2]=validate_college($coll);
 $flags[3]=validate_email($em);
 $flags[4]=validate_gender($gn);
 $flags[5]=validate_phone($ct);
+$flags[6]=validate_user($usr);
 
 if(in_array(0, $flags))
 {
@@ -45,10 +39,18 @@ if(in_array(0, $flags))
 		echo "Gender is invalid<br><br>";
 	if($flags[5]==0)
 		echo "Phone is invalid<br><br>";
+	if($flags[6]==0)
+		echo "User is invalid<br><br>";
 	die();
 }
 
 $connection=mysqli_connect("localhost","phpmyadmin","utkarsh_123","sports_portal");
+
+if (mysqli_connect_errno()) {
+    printf("Connection failed: %s\n", mysqli_connect_error());
+    die();
+}
+
 $nm=mysqli_real_escape_string($connection,$nm);
 $rg=mysqli_real_escape_string($connection,$rg);
 $coll=mysqli_real_escape_string($connection,$coll);
@@ -59,25 +61,35 @@ $usr=mysqli_real_escape_string($connection,$usr);
 
 $query ="INSERT INTO
 		 delegate_reg(Name,Reg_num,College,Email,Phone,Gender,U_id) VALUES
-		 ('$nm', '$rg', '$coll', '$em', '$ct', '$gn','$usr');";
-$result=mysqli_query($connection,$query);
+		 (?, ?, ?, ?, ?, ?,?);";
 
-if(!$result)
-{
-	echo "Not working";
-}
-else
-{
+$stmt = mysqli_prepare($connection,$query);
+
+mysqli_stmt_bind_param($stmt, 'sssssss', $nm, $rg, $coll, $em, $ct, $gn,$usr);
+
+mysqli_stmt_execute($stmt);
+
+mysqli_stmt_fetch($stmt);
+
+mysqli_stmt_close($stmt);
+
 $id=mysqli_insert_id($connection);
 echo "<h2>User successfully registered with id ".$id."</h2>";
-echo "<pre>";
-print_r($_POST);
-echo "</pre>";
-}
+
 mysqli_close($connection);
-//}
-/*else
-{
-	die("<h2>Login Failed</h2>");
-}*/
 ?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet"
+		      type="text/css"
+              href="style.css">
+		<title>Add User</title>
+	</head>
+	<body>
+		<center>
+		
+		</center>
+	</body>
+</html>
+<header></header>

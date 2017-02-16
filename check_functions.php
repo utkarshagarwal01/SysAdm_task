@@ -26,4 +26,8 @@ function validate_phone($var)
 {
 	return preg_match("/^[+]{0,1}[0-9]{10,15}$/", $var);	
 }
+function validate_user($var)
+{
+	return preg_match("/^[0-9]{1,10}$/", $var);	
+}
 ?>
