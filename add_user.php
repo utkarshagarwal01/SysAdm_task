@@ -3,12 +3,16 @@
 //if(isset($_SESSION["user"]) && !empty($_SESSION["user"]))
 //{
 
+require_once("check_functions.php");
 
 if ($_SERVER['REQUEST_METHOD'] != 'POST' || !isset($_POST['secret']))
 {
 	echo "Some error occured"; 
 	die();
 }
+
+
+
 
 $nm=$_POST['name'];
 $rg=$_POST['reg'];
@@ -18,6 +22,31 @@ $gn=$_POST['gender'];
 $ct=$_POST['cont'];
 $usr=1;
 
+$flags= array();
+
+$flags[0]=validate_name($nm);
+$flags[1]=validate_reg($rg);
+$flags[2]=validate_college($coll);
+$flags[3]=validate_email($em);
+$flags[4]=validate_gender($gn);
+$flags[5]=validate_phone($ct);
+
+if(in_array(0, $flags))
+{
+	if($flags[0]==0)
+		echo "Name is invalid<br><br>";
+	if($flags[1]==0)
+		echo "Registration number is invalid<br><br>";
+	if($flags[2]==0)
+		echo "College is invalid<br><br>";
+	if($flags[3]==0)
+		echo "Email is invalid<br><br>";
+	if($flags[4]==0)
+		echo "Gender is invalid<br><br>";
+	if($flags[5]==0)
+		echo "Phone is invalid<br><br>";
+	die();
+}
 
 $connection=mysqli_connect("localhost","phpmyadmin","utkarsh_123","sports_portal");
 $nm=mysqli_real_escape_string($connection,$nm);
@@ -35,7 +64,7 @@ $result=mysqli_query($connection,$query);
 
 if(!$result)
 {
-	echo "not working";
+	echo "Not working";
 }
 else
 {
